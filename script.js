@@ -46,29 +46,59 @@ function playRound(playerSelection, computerSelection){
 }
 
 function game(){
+    console.log('hello there')
     let winNumber = 0;
     let loseNumber = 0;
-    for (let i = 0; i < 5; i++) {
-        computerSelection = computerPlay();
-        playerSelection = prompt("rock, paper, scissors?");
-        result = playRound(playerSelection, computerSelection);
-        if (result.substr(0,3) == 'win') {
-            winNumber++;
+    let track = 0;
+    const buttons = document.querySelectorAll('button');
+    console.log(buttons);
+
+    buttons.forEach((button) => {
+        button.addEventListener('click', () => {
+            console.log(track);
+            let playerSelection = button.id;
+            let computerSelection = computerPlay();
+            
+            let result = playRound(playerSelection, computerSelection)
+            
+            if (result.substr(0,3) == 'win') {
+                winNumber++;
+            }
+            if (result.substr(0,4) == 'lose'){
+                loseNumber++;
+            }
+            
+            
+            track++;
+            if (track <= 5) {
+                const stat = document.querySelector('.status');
+                const div = document.createElement('div');
+                div.textContent = `Result of the round ${track}:  ${result}`;
+                stat.appendChild(div);
+            }
+
+            if (track === 5){
+                let lastMessage;
+                console.log(winNumber, loseNumber)
+                if (winNumber > loseNumber) {
+                    lastMessage = 'Player Won! Congrulations';
+                } else if (winNumber > loseNumber) {
+                    lastMessage = 'You lost :/ Try Again!';
+                } else {
+                    lastMessage = 'It is a tie so everybody won!';
+                }
+                const stat = document.querySelector('.status');
+                const endOfMatchMessage = `${lastMessage} playerScore is ${winNumber} computerScore is ${loseNumber}`
+                const header = document.createElement('h3');
+                header.textContent = endOfMatchMessage;
+                stat.appendChild(header);
+    
+                return winNumber,loseNumber;
+            }
         }
-        
-        if (result.substr(0,4) == 'lose'){
-            loseNumber++;
-        }
-    }
-    if (winNumber > loseNumber) {
-        console.log('Player Won! Congrulations');
-    } else if (winNumber > loseNumber) {
-        console.log('You lost :/ Try Again!');
-    } else {
-        console.log('It is a tie so everybody won!');
-    }
-    console.log(winNumber,loseNumber)
-    return winNumber,loseNumber
+        )});
+
+    
 }
 
 game();
